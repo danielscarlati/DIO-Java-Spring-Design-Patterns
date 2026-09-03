@@ -1,4 +1,4 @@
-package org.example;
+package org.example.singleton;
 
 // Singleton "Lazy Holder"
 public class SingletonLazyHolder {

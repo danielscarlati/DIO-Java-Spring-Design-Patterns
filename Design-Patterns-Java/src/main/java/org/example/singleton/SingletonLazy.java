@@ -1,4 +1,4 @@
-package org.example;
+package org.example.singleton;
 
 // Singleton "preguiçoso"
 public class SingletonLazy {
