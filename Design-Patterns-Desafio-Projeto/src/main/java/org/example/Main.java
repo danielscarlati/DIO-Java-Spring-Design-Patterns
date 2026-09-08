@@ -27,6 +27,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
+        // Fabrica abstrata
         Application app = configureApplication();
         app.paint();
     }
