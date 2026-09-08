@@ -12,12 +12,17 @@ public class Main {
         Application app;
         GUIFactory factory;
         String commandName = System.getProperty("command.name", "").toLowerCase();
-        if (commandName.contains("attack")) {
-            factory = new AttackButtonFactory();
+        if (commandName.isEmpty()) {
+            // No command specified: create both Attack and Jump buttons
+            app = new Application(new AttackButtonFactory(), new JumpButtonFactory());
         } else {
-            factory = new JumpButtonFactory();
+            if (commandName.contains("attack")) {
+                factory = new AttackButtonFactory();
+            } else {
+                factory = new JumpButtonFactory();
+            }
+            app = new Application(factory);
         }
-        app = new Application(factory);
         return app;
     }
 
