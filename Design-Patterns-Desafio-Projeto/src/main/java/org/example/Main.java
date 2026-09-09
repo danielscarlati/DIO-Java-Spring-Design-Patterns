@@ -4,6 +4,12 @@ import org.example.AbstractFactory.app.Application;
 import org.example.AbstractFactory.factories.AttackButtonFactory;
 import org.example.AbstractFactory.factories.GUIFactory;
 import org.example.AbstractFactory.factories.JumpButtonFactory;
+import org.example.Bridge.Canais.CanalNotificacao;
+import org.example.Bridge.Canais.EmailCanal;
+import org.example.Bridge.Canais.SMSCanal;
+import org.example.Bridge.Notificacoes.Notificacao;
+import org.example.Bridge.Notificacoes.NotificacaoPromocional;
+import org.example.Bridge.Notificacoes.NotificacaoUrgente;
 
 public class Main {
 
@@ -31,5 +37,24 @@ public class Main {
         // Fabrica abstrata
         Application app = configureApplication();
         app.paint();
+
+        // Bridge (Ponte)
+        // Criando os canais (Implementações)
+        CanalNotificacao email = new EmailCanal();
+        CanalNotificacao sms = new SMSCanal();
+
+        // Enviando notificação URGENTE via SMS
+        Notificacao urgenciaSms = new NotificacaoUrgente(sms);
+        urgenciaSms.notificar("+5511999999999", "Servidor caiu!");
+
+        // Enviando notificação URGENTE via Email (Mesma abstração, outro canal)
+        Notificacao urgenciaEmail = new NotificacaoUrgente(email);
+        urgenciaEmail.notificar("admin@empresa.com", "Servidor caiu!");
+
+        // Enviando notificação PROMOCIONAL via Email
+        Notificacao promoEmail = new NotificacaoPromocional(email);
+        promoEmail.notificar("cliente@gmail.com", "50% de desconto no plano Pro.");
+
+        // Chain of Responsibility (Cadeia de Responsabilidade)
     }
 }
