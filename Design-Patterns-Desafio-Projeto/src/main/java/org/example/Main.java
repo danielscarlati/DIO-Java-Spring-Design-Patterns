@@ -10,6 +10,10 @@ import org.example.Bridge.Canais.SMSCanal;
 import org.example.Bridge.Notificacoes.Notificacao;
 import org.example.Bridge.Notificacoes.NotificacaoPromocional;
 import org.example.Bridge.Notificacoes.NotificacaoUrgente;
+import org.example.ChainOfResponsability.Handlers.AuthenticationHandler;
+import org.example.ChainOfResponsability.Handlers.FieldValidationHandler;
+import org.example.ChainOfResponsability.Handlers.Handler;
+import org.example.ChainOfResponsability.Handlers.RoleCheckHandler;
 
 public class Main {
 
@@ -56,5 +60,20 @@ public class Main {
         promoEmail.notificar("cliente@gmail.com", "50% de desconto no plano Pro.");
 
         // Chain of Responsibility (Cadeia de Responsabilidade)
+        // Montagem da corrente: FieldValidation -> Authentication -> RoleCheck
+        Handler pipeline = new FieldValidationHandler();
+        pipeline.linkWith(new AuthenticationHandler())
+                .linkWith(new RoleCheckHandler());
+
+        System.out.println("--- Tentativa 1: Senha inválida ---");
+        pipeline.handle("admin@cyber.com", "123", true);
+
+        System.out.println("\n--- Tentativa 2: Sem privilégio de admin ---");
+        pipeline.handle("admin@cyber.com", "123456", false);
+
+        System.out.println("\n--- Tentativa 3: Sucesso ---");
+        boolean sucesso = pipeline.handle("admin@cyber.com", "123456", true);
+        System.out.println("Resultado do Acesso: " + (sucesso ? "AUTORIZADO" : "BLOQUEADO"));
     }
 }
+
